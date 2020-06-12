@@ -3,9 +3,7 @@
     <h2>
       <slot name="spy-name" />
     </h2>
-    <p>
-      <slot name="spy-description" />
-    </p>
+    <slot name="spy-description" />
   </div>
 </template>
 
@@ -13,7 +11,7 @@
 export default {
   name: "SpyItem",
   props: {
-    likes: String
+    spyState: Boolean
   }
 };
 </script>

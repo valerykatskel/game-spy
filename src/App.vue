@@ -8,7 +8,9 @@
         @click="startGame(item.id)"
       >
         <template slot="spy-name"> {{ item.name }} </template>
-        <template slot="spy-description"> {{ item.description }} </template>
+        <template v-if="item.active" slot="spy-description">
+          {{ item.description }}
+        </template>
       </spy-item>
     </section>
 
@@ -51,6 +53,7 @@
         Вы провалили проверку своей легенды, ответ не правильный, все было
         совсем не так в легенде!
       </p>
+      <button @click="startNewGame">Начать заново?</button>
     </section>
   </div>
 </template>
@@ -63,7 +66,7 @@ export default {
   name: "App",
   data() {
     return {
-      counter: 3,
+      counter: 10,
       showCounter: true,
       isGameActive: false,
       isWon: false,
@@ -73,90 +76,89 @@ export default {
           id: 0,
           name: "Роковая блондинка",
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque turpis lacus, pretium et libero et, rutrum cursus ligula. Aenean sed quam quam. Cras interdum turpis nec scelerisque lobortis.",
+            "Пример. В прошлую пятницу вечером подруга попросила подвезти в клуб 'Night'",
           active: false,
           questions: [
             {
               id: 0,
               title: "Вопрос блондинке #1",
-              text: "Нравится ли вам тот человек, которым вы стали?",
+              text: "Когда происходило описанное в легенде?",
               active: true,
               answers: [
                 {
                   id: 0,
-                  text: "1",
+                  text: "Вчера",
                   isFailed: true
                 },
                 {
                   id: 1,
-                  text: "2",
-                  isFailed: false
+                  text: "В прошлую среду",
+                  isFailed: true
                 },
                 {
                   id: 2,
-                  text: "3",
+                  text: "В прошлую пятницу",
                   isFailed: false
                 },
                 {
                   id: 3,
-                  text: "4",
-                  isFailed: false
+                  text: "На прошлых выходных",
+                  isFailed: true
                 }
               ]
             },
             {
               id: 1,
               title: "Вопрос блондинке #2",
-              text:
-                "Как часто реализуются ваши самые сильные тревоги и страхи?",
+              text: "О ком, кроме вас рассказывается в легенде?",
               active: false,
               answers: [
                 {
                   id: 0,
-                  text: "1",
-                  isFailed: false
+                  text: "О кошке",
+                  isFailed: true
                 },
                 {
                   id: 1,
-                  text: "2",
+                  text: "О подруге",
                   isFailed: false
                 },
                 {
                   id: 2,
-                  text: "3",
+                  text: "О коллеге",
                   isFailed: true
                 },
                 {
                   id: 3,
-                  text: "4",
-                  isFailed: false
+                  text: "О соседке",
+                  isFailed: true
                 }
               ]
             },
             {
               id: 2,
               title: "Вопрос блондинке #3",
-              text: "О чем вы будете сожалеть, что не сделали в своей жизни?",
+              text: "Что попросила сделать ваша подруга?",
               active: false,
               answers: [
                 {
                   id: 0,
-                  text: "1",
-                  isFailed: false
+                  text: "Почитать историю",
+                  isFailed: true
                 },
                 {
                   id: 1,
-                  text: "2",
-                  isFailed: false
+                  text: "Позвонить родителям",
+                  isFailed: true
                 },
                 {
                   id: 2,
-                  text: "3",
+                  text: "Сгонять в магаз",
                   isFailed: true
                 },
                 {
                   id: 3,
-                  text: "4",
+                  text: "Подвезти в клуб",
                   isFailed: false
                 }
               ]
@@ -164,41 +166,33 @@ export default {
             {
               id: 3,
               title: "Вопрос блондинке #4",
-              text: "Какова самая мудрая мысль, которую вы когда-либо слышали?",
+              text: "Какое было название клуба?",
               active: false,
               answers: [
                 {
                   id: 0,
-                  text: "1",
-                  isFailed: false
+                  text: "Star",
+                  isFailed: true
                 },
                 {
                   id: 1,
-                  text: "2",
+                  text: "Mega",
                   isFailed: true
                 },
                 {
                   id: 2,
-                  text: "3",
+                  text: "Night",
                   isFailed: false
-                }
-              ]
-            },
-            {
-              id: 4,
-              title: "Вопрос блондинке #5",
-              text: "Чему вас научил ваш личный горький опыт?",
-              active: false,
-              answers: [
+                },
                 {
-                  id: 0,
-                  text: "1",
+                  id: 2,
+                  text: "Boom",
                   isFailed: true
                 },
                 {
-                  id: 1,
-                  text: "2",
-                  isFailed: false
+                  id: 2,
+                  text: "Right",
+                  isFailed: true
                 }
               ]
             }
@@ -469,6 +463,17 @@ export default {
         }, 1000);
       }
       this.isGameActive = true;
+    },
+    startNewGame() {
+      this.counter = 10;
+      this.showCounter = true;
+      this.isGameActive = false;
+      this.isWon = false;
+      this.isGameOver = false;
+      this.activeSpy[0].questions.forEach((el, id) =>
+        id > 0 ? (el.active = false) : (el.active = true)
+      );
+      this.activeSpy[0].active = false;
     },
     startGame(id) {
       this.spies[id].active = true;
